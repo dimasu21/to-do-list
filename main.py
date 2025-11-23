@@ -29,6 +29,10 @@ task_id_counter = 1
 def read_root():
     return FileResponse('index.html')
 
+@app.get("/favicon.svg")
+def read_favicon():
+    return FileResponse('favicon.svg')
+
 @app.get("/tasks", response_model=List[Task])
 def get_tasks():
     return tasks_db
