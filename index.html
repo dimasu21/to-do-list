@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -155,108 +156,117 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>My Tasks</h1>
-    
-    <div class="input-group">
-        <input type="text" id="taskInput" placeholder="Add a new task..." onkeypress="handleKeyPress(event)">
-        <button class="btn-add" onclick="addTask()">Add</button>
+    <div class="container">
+        <h1>My Tasks</h1>
+
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Add a new task..." onkeypress="handleKeyPress(event)">
+            <button class="btn-add" onclick="addTask()">Add</button>
+        </div>
+
+        <ul id="taskList">
+            <!-- Tasks will be loaded here -->
+        </ul>
     </div>
 
-    <ul id="taskList">
-        <!-- Tasks will be loaded here -->
-    </ul>
-</div>
+    <script>
+        const API_URL = '/tasks';
 
-<script>
-    const API_URL = 'http://127.0.0.1:8000/tasks';
-
-    async function fetchTasks() {
-        try {
-            const response = await fetch(API_URL);
-            const tasks = await response.json();
-            renderTasks(tasks);
-        } catch (error) {
-            console.error('Error fetching tasks:', error);
+        async function fetchTasks() {
+            try {
+                const response = await fetch(API_URL);
+                const tasks = await response.json();
+                renderTasks(tasks);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
         }
-    }
 
-    function renderTasks(tasks) {
-        const taskList = document.getElementById('taskList');
-        taskList.innerHTML = '';
-        tasks.forEach(task => {
-            const li = document.createElement('li');
-            li.className = task.completed ? 'completed' : '';
-            li.innerHTML = `
+        function renderTasks(tasks) {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = task.completed ? 'completed' : '';
+                li.innerHTML = `
                 <div class="task-content" onclick="toggleTask(${task.id}, ${!task.completed}, '${task.title}', '${task.description || ''}')">
                     <div class="checkbox"></div>
                     <span>${task.title}</span>
                 </div>
                 <button class="btn-delete" onclick="deleteTask(${task.id})">&times;</button>
             `;
-            taskList.appendChild(li);
-        });
-    }
-
-    async function addTask() {
-        const input = document.getElementById('taskInput');
-        const title = input.value.trim();
-        if (!title) return;
-
-        try {
-            await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title, description: "" })
+                taskList.appendChild(li);
             });
-            input.value = '';
-            fetchTasks();
-        } catch (error) {
-            console.error('Error adding task:', error);
         }
-    }
 
-    async function toggleTask(id, completed, title, description) {
-        try {
-            await fetch(`${API_URL}/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description, completed, id })
-            });
-            fetchTasks();
-        } catch (error) {
-            console.error('Error updating task:', error);
+        async function addTask() {
+            const input = document.getElementById('taskInput');
+            const title = input.value.trim();
+            if (!title) return;
+
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: title, description: "" })
+                });
+                input.value = '';
+                fetchTasks();
+            } catch (error) {
+                console.error('Error adding task:', error);
+            }
         }
-    }
 
-    async function deleteTask(id) {
-        if (!confirm('Are you sure?')) return;
-        try {
-            await fetch(`${API_URL}/${id}`, {
-                method: 'DELETE'
-            });
-            fetchTasks();
-        } catch (error) {
-            console.error('Error deleting task:', error);
+        async function toggleTask(id, completed, title, description) {
+            try {
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, completed, id })
+                });
+                fetchTasks();
+            } catch (error) {
+                console.error('Error updating task:', error);
+            }
         }
-    }
 
-    function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            addTask();
+        async function deleteTask(id) {
+            if (!confirm('Are you sure?')) return;
+            try {
+                await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+                fetchTasks();
+            } catch (error) {
+                console.error('Error deleting task:', error);
+            }
         }
-    }
 
-    // Initial load
-    fetchTasks();
-</script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        // Initial load
+        fetchTasks();
+    </script>
 
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -26,7 +27,7 @@ task_id_counter = 1
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the To-Do List API"}
+    return FileResponse('index.html')
 
 @app.get("/tasks", response_model=List[Task])
 def get_tasks():
