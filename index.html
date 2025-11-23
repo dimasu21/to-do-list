@@ -1,172 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
+--secondary-color: #03dac6;
+--text-color: #e0e0e0;
+--danger-color: #cf6679;
+}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern To-Do List</title>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --primary-color: #bb86fc;
-            --secondary-color: #03dac6;
-            --text-color: #e0e0e0;
-            --danger-color: #cf6679;
-        }
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: var(--bg-color);
+color: var(--text-color);
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+.container {
+width: 100%;
+max-width: 500px;
+background-color: var(--card-bg);
+padding: 2rem;
+border-radius: 15px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+backdrop-filter: blur(10px);
+}
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background-color: var(--card-bg);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-        }
+h1 {
+text-align: center;
+color: var(--primary-color);
+margin-bottom: 2rem;
+font-weight: 300;
+letter-spacing: 2px;
+}
 
-        h1 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
+.input-group {
+display: flex;
+gap: 10px;
+margin-bottom: 2rem;
+}
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 2rem;
-        }
+input[type="text"] {
+flex-grow: 1;
+padding: 12px;
+border-radius: 8px;
+border: 1px solid #333;
+background-color: #2c2c2c;
+color: var(--text-color);
+outline: none;
+transition: border-color 0.3s;
+}
 
-        input[type="text"] {
-            flex-grow: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            background-color: #2c2c2c;
-            color: var(--text-color);
-            outline: none;
-            transition: border-color 0.3s;
-        }
+input[type="text"]:focus {
+border-color: var(--primary-color);
+}
 
-        input[type="text"]:focus {
-            border-color: var(--primary-color);
-        }
+button {
+padding: 12px 20px;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: bold;
+transition: transform 0.2s, opacity 0.2s;
+}
 
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s, opacity 0.2s;
-        }
+button:active {
+transform: scale(0.95);
+}
 
-        button:active {
-            transform: scale(0.95);
-        }
+.btn-add {
+background-color: var(--primary-color);
+color: #000;
+}
 
-        .btn-add {
-            background-color: var(--primary-color);
-            color: #000;
-        }
+.btn-add:hover {
+opacity: 0.9;
+}
 
-        .btn-add:hover {
-            opacity: 0.9;
-        }
+ul {
+list-style: none;
+padding: 0;
+}
 
-        ul {
-            list-style: none;
-            padding: 0;
-        }
+li {
+background-color: #2c2c2c;
+margin-bottom: 10px;
+padding: 15px;
+border-radius: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: transform 0.2s;
+animation: fadeIn 0.3s ease-in-out;
+}
 
-        li {
-            background-color: #2c2c2c;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
-            animation: fadeIn 0.3s ease-in-out;
-        }
+li:hover {
+transform: translateY(-2px);
+}
 
-        li:hover {
-            transform: translateY(-2px);
-        }
+li.completed span {
+text-decoration: line-through;
+color: #777;
+}
 
-        li.completed span {
-            text-decoration: line-through;
-            color: #777;
-        }
+.task-content {
+display: flex;
+align-items: center;
+gap: 10px;
+cursor: pointer;
+flex-grow: 1;
+}
 
-        .task-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            flex-grow: 1;
-        }
+.checkbox {
+width: 20px;
+height: 20px;
+border: 2px solid var(--secondary-color);
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+transition: background-color 0.3s;
+}
 
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--secondary-color);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
+li.completed .checkbox {
+background-color: var(--secondary-color);
+}
 
-        li.completed .checkbox {
-            background-color: var(--secondary-color);
-        }
+li.completed .checkbox::after {
+content: '✓';
+color: #000;
+font-size: 12px;
+}
 
-        li.completed .checkbox::after {
-            content: '✓';
-            color: #000;
-            font-size: 12px;
-        }
+.btn-delete {
+background-color: transparent;
+color: var(--danger-color);
+padding: 8px;
+font-size: 1.2rem;
+}
 
-        .btn-delete {
-            background-color: transparent;
-            color: var(--danger-color);
-            padding: 8px;
-            font-size: 1.2rem;
-        }
+.btn-delete:hover {
+color: #ff4d4d;
+background-color: rgba(207, 102, 121, 0.1);
+}
 
-        .btn-delete:hover {
-            color: #ff4d4d;
-            background-color: rgba(207, 102, 121, 0.1);
-        }
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(10px);
+}
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+</style>
 </head>
 
 <body>
